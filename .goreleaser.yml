@@ -26,6 +26,6 @@ archives:
 release:
   prerelease: auto
   github:
-    owner: aquasecurity
+    owner: kathleen-french
     name: tfsec-pr-commenter-action
 

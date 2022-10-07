@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -47,7 +48,7 @@ func main() {
 	}
 	fmt.Printf("TFSec found %v issues\n", len(results))
 
-	c, err := commenter.NewCommenter(token, owner, repo, prNo)
+	c, err := createCommenter(token, owner, repo, prNo)
 	if err != nil {
 		fail(fmt.Sprintf("could not connect to GitHub (%s)", err.Error()))
 	}
@@ -99,6 +100,24 @@ func main() {
 		}
 		os.Exit(1)
 	}
+}
+
+func createCommenter(token, owner, repo string, prNo int) (*commenter.Commenter, error) {
+	var err error
+	var c *commenter.Commenter
+
+	githubApiUrl := os.Getenv("GITHUB_API_URL")
+	if githubApiUrl == "" || githubApiUrl == "https://api.github.com" {
+		c, err = commenter.NewCommenter(token, owner, repo, prNo)
+	} else {
+		url, err := url.Parse(githubApiUrl)
+		if err == nil {
+			enterpriseUrl := fmt.Sprintf("%s://%s", url.Scheme, url.Hostname())
+			c, err = commenter.NewEnterpriseCommenter(token, enterpriseUrl, enterpriseUrl, owner, repo, prNo)
+		}
+	}
+
+	return c, err
 }
 
 func generateErrorMessage(result result) string {
