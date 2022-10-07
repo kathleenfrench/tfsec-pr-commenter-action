@@ -1,4 +1,4 @@
-module github.com/kathleen-french/tfsec-github-commenter-action
+module github.com/kathleenfrench/tfsec-github-commenter-action
 
 go 1.18
 

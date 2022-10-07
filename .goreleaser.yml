@@ -22,6 +22,6 @@ archives:
 release:
   prerelease: auto
   github:
-    owner: kathleen-french
+    owner: kathleenfrench
     name: tfsec-pr-commenter-action
 
